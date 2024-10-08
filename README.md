@@ -17,7 +17,7 @@ bun install
 bunx tauri build
 ```
 
-That's literally it.
+That's literally it. Yes, this needs a logo and some detail work.
 Random screenshots below:
 
 
