@@ -6,12 +6,13 @@ You export your discord data, import it into this fancy little desktop app, and 
 
 Now nobody will know that you sent 'I love to code in javascript" 23 times the past 6 years.
 
-You can grab the windows release under releases, or just build it yourselfL
+You can grab the windows/linux release under releases, or just build it yourselfL
 
 1. Install deps
 ```
 bun install
 ```
+
 2. Build
 ```
 bunx tauri build
