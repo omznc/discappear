@@ -1,4 +1,4 @@
-import type { DiscordBackup } from "@/components/discord";
+import type { DiscordBackup } from "@/lib/discord";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

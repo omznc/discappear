@@ -1,6 +1,6 @@
 import type { User } from "@/lib/discord";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { ArrowUpRight, SquareArrowOutUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect } from "react";
 
 export function TitleBar({ user }: { user: User | null }) {

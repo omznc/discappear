@@ -1,13 +1,12 @@
 use serde::{de, Deserialize, Deserializer, Serialize};
 use serde_json::{json, Value};
-use std::{fmt, fs, path::Path};
+use tauri::Manager;
+use std::{fmt, fs, path::{Path, PathBuf}};
 use reqwest::header::AUTHORIZATION;
-use std::env::current_exe;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_sql::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![read_discord_backup, delete_message])
         .run(tauri::generate_context!())
@@ -85,8 +84,22 @@ struct DiscordBackup {
     guilds: Vec<GuildChat>,
 }
 
+
+fn get_or_create_deleted_messages_path(app_handle: &tauri::AppHandle) -> Result<PathBuf, String> {
+    // Get the application data directory
+    let app_data_path = app_handle.path().app_data_dir().unwrap();
+    
+    // Ensure the directory exists
+    if !app_data_path.exists() {
+        fs::create_dir_all(&app_data_path).map_err(|e| e.to_string())?;
+    }
+
+    // Return the path to the JSON file
+    Ok(app_data_path.join("deleted_messages.json"))
+}
+
 #[tauri::command]
-async fn delete_message(token: String, channel_id: String, message_id: String) -> Result<u16, String> {
+async fn delete_message(app_handle: tauri::AppHandle, token: String, channel_id: String, message_id: String) -> Result<u16, String> {
     let url = format!("https://discord.com/api/v9/channels/{}/messages/{}", channel_id, message_id);
 
     let client = reqwest::Client::new();
@@ -96,12 +109,7 @@ async fn delete_message(token: String, channel_id: String, message_id: String) -
         .send()
         .await;
 
-    // Get the path of the JSON file next to the executable
-    let json_path = current_exe()
-        .map_err(|e| e.to_string())?
-        .parent()
-        .ok_or("Could not get executable path")?
-        .join("deleted_messages.json");
+    let json_path = get_or_create_deleted_messages_path(&app_handle)?;
 
     match response {
         Ok(resp) => {
@@ -144,18 +152,15 @@ async fn delete_message(token: String, channel_id: String, message_id: String) -
 }
 
 #[tauri::command]
-fn read_discord_backup(directory: String) -> Result<DiscordBackup, String> {
+fn read_discord_backup(app_handle: tauri::AppHandle, directory: String) -> Result<DiscordBackup, String> {
     let path = Path::new(&directory);
     if !path.is_dir() {
         return Err("Provided directory is not valid".to_string());
     }
 
     // Get the path of the JSON file next to the executable
-    let json_path = current_exe()
-        .map_err(|e| e.to_string())?
-        .parent()
-        .ok_or("Could not get executable path")?
-        .join("deleted_messages.json");
+    let json_path = get_or_create_deleted_messages_path(&app_handle)?;
+
 
     // Load deleted messages from JSON file
     let mut deleted_message_ids = vec![];

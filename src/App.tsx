@@ -1,13 +1,12 @@
 import type { User } from "@/lib/discord";
 import "./App.css";
 import { useState, useMemo, type Dispatch, type SetStateAction } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TitleBar } from "@/components/title-bar";
 import { Auth } from "@/components/auth";
 import { PathInput } from "@/components/path-input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { DiscordBackup, Message } from "@/components/discord";
+import type { DiscordBackup, Message } from "./lib/discord";
 import { invoke } from "@tauri-apps/api/core";
 import { FilterForm, type Filter } from "@/components/filters";
 
@@ -17,9 +16,9 @@ export default function App() {
 	const [path, setPath] = useState("");
 
 	return (
-		<main className="flex flex-col items-center justify-start h-screen pt-[30px]">
+		<main className="flex flex-col overflow-hidden items-center justify-start h-dvh max-h-dvh pt-[30px]">
 			<TitleBar user={user} />
-			<div className="h-full w-full flex flex-col items-center justify-center">
+			<div className="h-full w-full max-h-[calc(100dvh-30px)] flex flex-col items-center justify-center">
 				{!user && <Auth setUser={setUser} />}
 				{user &&
 					(data ? (
@@ -85,7 +84,6 @@ function Content({
 						channelId: message.channelId,
 						messageId: message.ID,
 					});
-					console.log(`Message ${message.ID} deletion request status ${status}`);
 					if (status === 404 || status === 204) {
 						const span = document.getElementById("delete-message-span") as HTMLSpanElement;
 						span.innerText = message.Contents;
@@ -103,28 +101,26 @@ function Content({
 	}
 
 	return (
-		<div className="flex flex-col size-full">
+		<div className="flex flex-col size-full overflow-y-auto">
 			{isDeleting && (
 				<DeletingOverlay progress={deleteProgress} total={filteredData.dms.length + filteredData.guilds.length} />
 			)}
 
-			<Card className="size-full border-none">
-				<CardHeader>
-					<CardTitle>Filter Messages</CardTitle>
-					<CardDescription>Enter text to filter messages and select message types</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<div className="flex flex-col gap-2">
-						<FilterForm
-							filter={filter}
-							setFilter={setFilter}
-							filteredData={filteredData}
-							deleteMessageHandler={deleteMessageHandler}
-						/>
-						<MessageTabs filteredData={filteredData} />
-					</div>
-				</CardContent>
-			</Card>
+			<div className="flex flex-col">
+				<div className="flex sticky border-b bg-white p-4  top-0 flex-col gap-2">
+					<h2 className="text-xl font-bold">Filter Messages</h2>
+					<p className="text-sm">Enter text to filter messages and select message types</p>
+					<FilterForm
+						filter={filter}
+						setFilter={setFilter}
+						filteredData={filteredData}
+						deleteMessageHandler={deleteMessageHandler}
+					/>
+				</div>
+				<div className="p-4">
+					<MessageTabs filteredData={filteredData} />
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -174,7 +170,7 @@ function MessageList({ messages }: { messages: MessageWithChannel[] }) {
 
 function DeletingOverlay({ progress, total }: { progress: number; total: number }) {
 	return (
-		<div className="fixed top-[30px] backdrop-blur-xs justify-center items-center text-white left-0 h-dvh w-screen bg-black/70 flex flex-col">
+		<div className="fixed top-[30px] z-50 backdrop-blur-xs justify-center items-center text-white left-0 h-dvh w-screen bg-black/70 flex flex-col">
 			<div className="flex flex-col w-full md:w-[500px] px-4 items-center gap-4">
 				Deleting messages ({progress}/{total})
 				<Progress value={progress} max={total} />
