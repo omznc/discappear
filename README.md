@@ -5,7 +5,11 @@
 </p>
 
 # Discappear - A tool to wipe your Discord sins
+<p align="center">  
 
+<img src="/public/tauri-badge.png">
+
+</p>
 
 What if you wanted to delete some of your Discord messages, but you can't be bothered searching through all channels and DMs?
 
