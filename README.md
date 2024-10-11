@@ -1,15 +1,10 @@
 <p align="center">  
-  
-<img src="https://github.com/user-attachments/assets/a5a943fa-e404-4378-afe4-f696acc7dbad">
+
+  ![Tauri](/public/cover.png)
 
 </p>
 
 # Discappear - A tool to wipe your Discord sins
-<p align="center">  
-
-<img src="/public/tauri-badge.png">
-
-</p>
 
 What if you wanted to delete some of your Discord messages, but you can't be bothered searching through all channels and DMs?
 
@@ -43,14 +38,12 @@ You can grab the windows/linux release under releases, or just build it yourself
 
 1. Install deps
 ```
-pnpm install
+bun install
 ```
 
 2. Build
 ```
-pnpm tauri build
+bunx tauri build
 ```
 
-![image](https://github.com/user-attachments/assets/0bfa4720-8e70-43c1-b30e-ba66e37f0990)
-
-![image](https://github.com/user-attachments/assets/d149c7cc-ad03-473d-8852-fa067b91059b)
+![Tauri](/public/tauri-badge.png)
