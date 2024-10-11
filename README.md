@@ -43,12 +43,12 @@ You can grab the windows/linux release under releases, or just build it yourself
 
 1. Install deps
 ```
-bun install
+pnpm install
 ```
 
 2. Build
 ```
-bunx tauri build
+pnpm tauri build
 ```
 
 ![image](https://github.com/user-attachments/assets/0bfa4720-8e70-43c1-b30e-ba66e37f0990)
