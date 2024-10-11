@@ -26,7 +26,7 @@ Good of you to ask.
 
 ## How does it work?
 
-The app uses the Discord API to get all your messages, and then uses a simple configurable filter to decide which messages to delete, with a preview of the message before it's deleted.
+The app uses your Discord export to get all your messages, and then uses a simple configurable filter to decide which messages to delete, with a preview of the message before it's deleted.
 
 ## Note
 
