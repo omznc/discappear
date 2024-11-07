@@ -32,7 +32,9 @@ The app uses your Discord export to get all your messages, and then uses a simpl
 
 Discord doesn't allow you to delete messages from servers you're not in, so if you got kicked, whoops.
 
----
+This is a bulk-deletion tool. There are no super specific filters, as it's meant for nuking your own history.
+
+## Privacy
 
 You can grab the windows/linux release under releases, or just build it yourself - you paranoid person:
 
